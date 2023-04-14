@@ -7,7 +7,7 @@ const Navbar = () => {
         console.log("hi")
     }
 
-    const [role, setRole] = useState("student")
+    const [role, setRole] = useState("teacher")
     const [loggedIn, setLoggedIn] = useState(true)
 
   return (
