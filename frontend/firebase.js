@@ -4,13 +4,14 @@ import "firebase/database";
 import "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  databaseURL: "YOUR_DATABASE_URL",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: "AIzaSyAHo_IVecYa_widFhM4XYJzfmjZqCDtTgk",
+  authDomain: "miami-ai-hackathon.firebaseapp.com",
+  databaseURL: "https://miami-ai-hackathon-default-rtdb.firebaseio.com",
+  projectId: "miami-ai-hackathon",
+  storageBucket: "miami-ai-hackathon.appspot.com",
+  messagingSenderId: "968150982638",
+  appId: "1:968150982638:web:8bf10798d540edf67978ff",
+  measurementId: "G-T9ZKMVS33Y",
 };
 
 firebase.initializeApp(firebaseConfig);
