@@ -2,9 +2,9 @@ import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import swal from 'sweetalert';
 import { useHistory } from 'react-router-dom';
-export const AppContext = createContext();
+export const AuthContext = createContext();
 
-export const AppContextProvider = ({ children }) => {
+export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -26,7 +26,7 @@ export const AppContextProvider = ({ children }) => {
   }, [currentUser, user]);
 
   return (
-    <AppContext.Provider
+    <AuthContext.Provider
       value={{
         currentUser,
         setCurrentUser,
@@ -35,6 +35,6 @@ export const AppContextProvider = ({ children }) => {
       }}
     >
       {children}
-    </AppContext.Provider>
+    </AuthContext.Provider>
   );
 };
