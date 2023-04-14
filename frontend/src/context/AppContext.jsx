@@ -1,26 +1,26 @@
-import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
-import swal from 'sweetalert';
-import { useHistory } from 'react-router-dom';
+import React, { createContext, useState, useEffect } from "react";
+import axios from "axios";
+import swal from "sweetalert";
+// import { useHistory } from 'react-router-dom';
 export const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  //   const history = useHistory();
 
-  let user = sessionStorage.getItem('user');
+  let user = sessionStorage.getItem("user");
 
   useEffect(() => {
-    user = sessionStorage.getItem('user');
+    user = sessionStorage.getItem("user");
     if (user && !currentUser) {
       axios
-        .get('/api/users/me', { withCredentials: true })
+        .get("/api/users/me", { withCredentials: true })
         .then(({ data }) => {
           setCurrentUser(data);
         })
         .catch((error) => {
-          swal('Oops!', error.toString());
+          swal("Oops!", error.toString());
         });
     }
   }, [currentUser, user]);
