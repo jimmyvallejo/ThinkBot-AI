@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Chat from "./pages/ChatPage";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import Navbar from "./components/Navbar"
 
 import { init } from "./firebase";
 
@@ -14,6 +15,7 @@ function App() {
   return (
     <AppContextProvider>
       <Router>
+        <Navbar />
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/tutor" element={<Chat />} />
@@ -22,6 +24,7 @@ function App() {
         </Routes>
       </Router>
     </AppContextProvider>
+
   );
 }
 
