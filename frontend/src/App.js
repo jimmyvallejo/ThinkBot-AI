@@ -19,7 +19,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route exact path="/login" elmement={<Login />} />
-        <Route exact path="/register" elmement={<Register />} />
+        <Route exact path="/register" element={<Register />} />
         <Route exact path="/tutor" element={<Chat />} />
         <Route exact path="/" element={<Authenticate component={Home} />} />
       </Routes>
