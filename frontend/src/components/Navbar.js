@@ -1,23 +1,33 @@
-import { useState, useContext } from "react";
+import { useState, useContext, } from "react";
 import { Link } from "react-router-dom";
 import { signOut, getAuth } from "firebase/auth";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 import Button from "./Buttton";
 import { colors } from "../styles/colors";
+import { useLocation } from "react-router-dom";
+
+
+
+
+
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
+
+  const location = useLocation();
   
-  const {setShowChat, setSubject} = useContext(ChatContext)
+  const {setShowChat, setSubject, role} = useContext(ChatContext)
 
   const handleSignout = () => signOut(getAuth());
+
+
 
     const clearStorage = () =>{
         console.log("hi")
     }
 
-    const [role, setRole] = useState("teacher")
+    
     const [loggedIn, setLoggedIn] = useState(true)
 
     const handleChange = () => {
@@ -34,7 +44,7 @@ const Navbar = () => {
         <img className="Robot" src="./Robot.png"></img>
         <h3>AI Tutor</h3>
       </Link>
-            <Button style={{background: colors.whites[500], color: colors.blues[500], fontSize: "20px", marginTop:"40px"}} onClick={() => handleChange()}> + New Chat</Button>
+            {location.pathname === "/tutor" &&<Button style={{background: colors.whites[500], color: colors.blues[500], fontSize: "20px", marginTop:"40px"}} onClick={() => handleChange()}> + New Chat</Button>}
             </div>
       <div className="navdiv">
         {role === "student" && (

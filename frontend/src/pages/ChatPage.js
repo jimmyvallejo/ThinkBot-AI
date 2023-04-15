@@ -6,13 +6,15 @@ import { ChatContext } from "../context/ChatContext";
 
 const Chat = () => {
     
-const { setSubject, classSubject, showChat, setShowChat,saveConvo, setSaveConvo } = useContext(ChatContext)
+const { setSubject, classSubject, showChat, setShowChat,saveConvo, role, setRole } = useContext(ChatContext)
 
 const [age, setAge] = useState("");
 
 const [name, setName] = useState("");
 
 const [dataLoaded, setDataLoaded] = useState(false);
+
+
 
 useEffect(() => {
   (async () => {
@@ -23,8 +25,7 @@ useEffect(() => {
       console.log(res);
       setAge(res.data.age);
       setName(res.data.displayName);
-      console.log(age);
-      console.log(name);
+      setRole(res.data.role)
       setDataLoaded(true); // Set dataLoaded to true after setting age and name
     } catch (e) {}
   })();
@@ -62,7 +63,7 @@ useEffect(() => {
 
   const handleLike = (elem) => {
     let question = conversation.indexOf(conversation.find((message) => message.content === elem)) -1
-    setLike({ uid: "my-test-id", question: conversation[question].content, answer: elem });
+    setLike({ uid: "my-test-id", question: conversation[question].content, answer: elem, subject: holdSubject });
   };
 
   const apiKey = "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";
@@ -105,6 +106,8 @@ useEffect(() => {
   const [conversation, setConversation] = useState([]);
 
   const [isLoading, setLoading] = useState(null);
+
+  const [rows, setRows] = useState(1)
 
   const containerRef = useRef(null);
 
@@ -213,19 +216,37 @@ useEffect(() => {
     console.log(saveConvo);
   };
 
-  const handleChange = () => {
-  setShowChat(null);
-   setSubject(null);
-   setSaveConvo()
-
-
+  const rowFunc = (e) => {
+    let hundred = e.length;
+    console.log(hundred)
+  
+    if (hundred >= 500) {
+      setRows(5);
+    } else if (hundred >= 400) {
+      setRows(4);
+    } else if (hundred >= 300) {
+      setRows(3);
+    } else if (hundred >= 200) {
+      setRows(2);
+    } else {
+      setRows(1);
+    }
+    console.log(rows)
   };
+    
+  
+  
+  const handleChange = (e) => {
+     setUserInput(e)
+     rowFunc(e)
+
+  }
 
   return (
     <div className="GPT">
       {!classSubject && classSubject !== "" && (
         <>
-          <h1 className="chatIntro">{`Hi ${name}, my name is Alfred`}</h1>
+          <h1 className="chatIntro">{`Hi ${name}, my name is Henry`}</h1>
           <h1 className="tutor">I'm your personal AI tutor</h1>
           <h3>What would you like help with today?</h3>
         </>
@@ -262,7 +283,9 @@ useEffect(() => {
       ) : (
         <div className="bigContainer">
           <div className="response">
+          <img className="aiPic" src="./robot.png"></img>
             <h1>AI Tutor</h1>
+            
             {isLoading ? (
               <div className="loader-container">
                 <Dna className="dna" color="#00BFFF" height={100} width={100} />
@@ -296,12 +319,12 @@ useEffect(() => {
               <textarea
                 className="input"
                 value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
+                onChange={(e) => handleChange(e.target.value)}
                 placeholder="How could I help you today?"
-                rows={4}
+                rows={rows}
               />
               <button className="submit" type="submit">
-                Submit
+                <img className="forward" src="./forward.png"></img>
               </button>
             </form>
           </div>
