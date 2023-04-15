@@ -25,7 +25,7 @@ const Navbar = () => {
     setSubject(null);
   };
 
-  if (location.pathname === "/login" || location.pathname === "/register" || location.pathname === '/')
+  if (location.pathname === "/login" || location.pathname === "/register" || location.pathname === '/' || location.pathname === '/teacher-dashboard')
     return null;
 
   return (
