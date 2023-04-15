@@ -107,7 +107,7 @@ app.post("/user", async (req, res) => {
 
 app.post("/users/createQuestion", async (req, res) => {
   console.log("test");
-  const { question, uid, answer } = req.body;
+  const { question, uid, answer, subject } = req.body;
 
   try {
     await getFirestore()
@@ -123,7 +123,8 @@ app.post("/users/createQuestion", async (req, res) => {
             questions: FieldValue.arrayUnion({
               createdAt: timestamp,
               question,
-              answer
+              answer,
+              subject,
             }),
           },
           { merge: true }
@@ -139,29 +140,37 @@ app.post("/users/createQuestion", async (req, res) => {
   }
 });
 
-
-
 app.get("/users/:uid", async (req, res) => {
   const { uid } = req.params;
 
+  let user;
   try {
-    await getFirestore()
-      .collection("students")
+    user = await getFirestore()
+      .collection(`students`)
       .where("uid", "==", uid)
       .get()
       .then((snapshot) => {
         const user = snapshot.docs[snapshot.docs.length - 1].data();
-        res.status(200).send(user);
-      })
-      .catch(() => {
-        throw {
-          message:
-            "There was an error getting your profile. Please refresh your browser and try again.",
-        };
+        return user;
+      });
+  } catch (error) {}
+
+  if (user) return res.status(200).send(user);
+
+  try {
+    user = await getFirestore()
+      .collection(`teachers`)
+      .where("uid", "==", uid)
+      .get()
+      .then((snapshot) => {
+        const user = snapshot.docs[snapshot.docs.length - 1].data();
+        return user;
       });
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
+
+  return res.status(200).send(user);
 });
 
 app.get("/users/getTeacherDashboard", async (req, res) => {

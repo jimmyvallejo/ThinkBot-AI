@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Grid, Typography, MenuItem } from "@mui/material";
+import { css } from "@emotion/react";
 import TextInput from "./TextInput";
 import { AuthContext } from "../context/AuthContext";
 import { post } from "../utils/api";
@@ -21,6 +22,8 @@ function Student({ history }) {
   const [age, setAge] = useState("");
   const [role, setRole] = useState("");
 
+  const [error, setError] = useState(null);
+
   const age_options = [5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18];
 
   const handleRegister = async (e) => {
@@ -38,7 +41,7 @@ function Student({ history }) {
           password,
           age,
           uid: userCredential.user.uid,
-          role: "student",
+          role,
         };
 
         await post("/user", user);
@@ -75,7 +78,7 @@ function Student({ history }) {
           variant="h3"
           align="center"
           style={{
-            fontSize: "28px",
+            fontSize: "24px",
             fontWeight: 300,
           }}
         >
@@ -103,6 +106,7 @@ function Student({ history }) {
           <TextInput
             label="Password"
             placeholder="Create password"
+            type="password"
             onChange={(e) => setPassword(e.target.value)}
             style={{ width: "60%" }}
           />

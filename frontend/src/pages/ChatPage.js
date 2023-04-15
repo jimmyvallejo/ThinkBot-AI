@@ -1,10 +1,12 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext} from "react";
 import { Configuration, OpenAIApi } from "openai";
 import { Dna } from "react-loader-spinner";
 import axios from "axios";
+import { ChatContext } from "../context/ChatContext";
 
 const Chat = () => {
     
+const { setSubject, classSubject, showChat, setShowChat,saveConvo, setSaveConvo } = useContext(ChatContext)
 
 const [age, setAge] = useState("");
 
@@ -63,7 +65,7 @@ useEffect(() => {
     setLike({ uid: "my-test-id", question: conversation[question].content, answer: elem });
   };
 
-  const apiKey = process.env.REACT_APP_API_KEY;
+  const apiKey = "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";
 
   const configuration = new Configuration({
     apiKey: apiKey,
@@ -106,9 +108,7 @@ useEffect(() => {
 
   const containerRef = useRef(null);
 
-  const [classSubject, setSubject] = useState(null);
-
-  const [showChat, setShowChat] = useState(null);
+  
 
  const setTutor = (subject) => {
   setHoldSubject(subject);
@@ -135,7 +135,7 @@ useEffect(() => {
 
  const [holdSubject, setHoldSubject] = useState("")
 
- const [saveConvo, setSaveConvo] = useState({});
+ 
 
   useEffect(() => {
     (async () => {
@@ -155,14 +155,6 @@ useEffect(() => {
 
   useEffect(() => {
     scrollToBottom();
-    if(conversation.length > 2) {
-      setSaveConvo({
-      uid: "my-test-id",
-      class: holdSubject,
-      convo: conversation.slice(2),
-    });
-  }
-    
   }, [conversation]);
 
   const scrollToBottom = () => {
@@ -222,8 +214,8 @@ useEffect(() => {
   };
 
   const handleChange = () => {
-    setShowChat(null);
-    setSubject(null);
+  setShowChat(null);
+   setSubject(null);
    setSaveConvo()
 
 
@@ -268,7 +260,7 @@ useEffect(() => {
           </div>
         </div>
       ) : (
-        <div>
+        <div className="bigContainer">
           <div className="response">
             <h1>AI Tutor</h1>
             {isLoading ? (
@@ -279,12 +271,6 @@ useEffect(() => {
               conversation.slice(1).map((elem, index) => {
                 return (
                   <div className="answer-container">
-                    <p key={index}>
-                      <strong>
-                        {elem.role === "user" ? "You: " : "AI Tutor: "}
-                      </strong>
-                      {elem.content}
-                    </p>
                     {elem.role !== "user" ? (
                       <img
                         onClick={() => handleLike(elem.content)}
@@ -293,6 +279,13 @@ useEffect(() => {
                     ) : (
                       <img></img>
                     )}
+                    <p key={index}>
+                      <strong>
+                        {elem.role === "user" ? "You: " : "AI Tutor: "}
+                      </strong>
+                      {elem.content}
+                    </p>
+                    
                   </div>
                 );
               })
@@ -311,9 +304,6 @@ useEffect(() => {
                 Submit
               </button>
             </form>
-            <button className="newSubject" onClick={() => handleChange()}>
-              Select new subject
-            </button>
           </div>
         </div>
       )}
