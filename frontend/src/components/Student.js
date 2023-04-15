@@ -43,8 +43,6 @@ function Student({ history }) {
       }
     } catch (e) {
       console.error(e);
-    } finally {
-      context.setLoadingUser(false);
     }
   };
 
