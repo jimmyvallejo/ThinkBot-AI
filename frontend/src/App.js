@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { AuthContextProvider } from "./context/AuthContext";
 import Authenticate from "./components/Authenticate";
+import { ChatContextProvider } from "./context/ChatContext";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -22,6 +23,7 @@ const theme = createTheme({
 function App() {
   return (
     <AuthContextProvider>
+      <ChatContextProvider>
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <Navbar />
@@ -33,6 +35,7 @@ function App() {
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
+      </ChatContextProvider>
     </AuthContextProvider>
   );
 }
