@@ -1,14 +1,15 @@
-import React from 'react';
+import logo from './logo.svg';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { AppContextProvider } from './context/AppContext';
+import { AuthContextProvider } from './context/AuthContext';
+import PrivateRoute from './components/PrivateRoute';
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import PrivateRoute from './components/PrivateRoute';
+import Register from "./pages/Register";
 import './App.css';
 
 function App() {
   return (
-    <AppContextProvider>
+    <AuthContextProvider>
       <BrowserRouter>
         <Switch>
           <Route exact path="/login" component={Login} />
@@ -16,7 +17,7 @@ function App() {
           <PrivateRoute exact path="/" component={Home} />
         </Switch>
       </BrowserRouter>
-    </AppContextProvider>
+    </AuthContextProvider>
   );
 }
 
