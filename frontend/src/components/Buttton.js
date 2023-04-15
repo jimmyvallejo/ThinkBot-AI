@@ -8,14 +8,14 @@ import { colors } from "../styles/colors";
 const Button = (props) => {
   return (
     <MuiButton
+      {...props}
       style={{
         background: colors.blues[500],
         textTransform: "none",
         color: "white",
-        ...(props.style || {})
+        ...(props.style || {}),
       }}
       variant="outlined"
-      {...props}
     >
       {props.children}
     </MuiButton>

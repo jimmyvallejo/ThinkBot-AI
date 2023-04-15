@@ -6,7 +6,7 @@ import Authenticate from "./components/Authenticate";
 import { ChatContextProvider } from "./context/ChatContext";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Register from "./components/register";
+import Register from "./pages/Register";
 import Chat from "./pages/ChatPage";
 import Navbar from "./components/Navbar";
 import Welcome from "./pages/welcome";
