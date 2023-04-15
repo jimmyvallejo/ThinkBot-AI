@@ -25,7 +25,7 @@ const Navbar = () => {
     setSubject(null);
   };
 
-  if (location.pathname === "/login" || location.pathname === "/register")
+  if (location.pathname === "/login" || location.pathname === "/register" || location.pathname === '/')
     return null;
 
   return (
