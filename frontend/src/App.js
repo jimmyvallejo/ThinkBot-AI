@@ -14,17 +14,17 @@ init();
 
 function App() {
   return (
-    // <AuthContextProvider>
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route exact path="/login" elmement={<Login />} />
-        <Route exact path="/register" element={<Register />} />
-        <Route exact path="/tutor" element={<Chat />} />
-        <Route exact path="/" element={<Authenticate component={Home} />} />
-      </Routes>
-    </BrowserRouter>
-    // </AuthContextProvider>
+    <AuthContextProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route exact path="/login" element={<Login />} />
+          <Route exact path="/register" element={<Register />} />
+          <Route exact path="/tutor" element={<Chat />} />
+          <Route exact path="/" element={<Authenticate component={Home} />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthContextProvider>
   );
 }
 

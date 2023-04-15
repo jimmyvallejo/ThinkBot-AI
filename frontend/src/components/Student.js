@@ -34,6 +34,7 @@ function Student({ history }) {
             email,
             password,
             age,
+            uid: userCredential.user.uid,
             role: "student",
           }
         );

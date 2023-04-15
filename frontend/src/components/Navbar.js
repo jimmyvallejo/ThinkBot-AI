@@ -1,19 +1,16 @@
-import { Link } from "react-router-dom"
-import { useState } from "react"
+import { Link } from "react-router-dom";
+import { signOut, getAuth } from "firebase/auth";
+import { useState } from "react";
 
 const Navbar = () => {
+  const clearStorage = () => signOut(getAuth());
 
-    const clearStorage = () =>{
-        console.log("hi")
-    }
-
-    const [role, setRole] = useState("teacher")
-    const [loggedIn, setLoggedIn] = useState(true)
+  const [role, setRole] = useState("teacher");
+  const [loggedIn, setLoggedIn] = useState(true);
 
   return (
     <nav>
       <Link className="navName" to={"/"}>
-        
         <img className="Robot" src="./Robot.png"></img>
         <h3>AI Tutor</h3>
       </Link>
@@ -43,6 +40,6 @@ const Navbar = () => {
       </div>
     </nav>
   );
-}
+};
 
-export default Navbar
+export default Navbar;

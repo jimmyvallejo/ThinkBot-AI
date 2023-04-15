@@ -19,15 +19,14 @@ admin.initializeApp({
 admin.firestore().settings({ ignoreUndefinedProperties: true });
 
 app.post("/user", async (req, res) => {
-  const { username, age, role, password, email } = req.body;
-  console.log("In the create user endpoint");
+  const { username, age, role, password, email, uid } = req.body;
+
   try {
     // if(role !== 'teacher') {
     //    res.status(500).send({ message: 'Please choose a valid user role.' })
     //    return
     // }
 
-    const uid = getFirestore().collection("users").doc().id;
     const profileImage = "https://picsum.photos/200/300";
 
     if (role === "teacher") {
@@ -67,10 +66,11 @@ app.post("/user", async (req, res) => {
         .doc()
         .create({
           uid,
-          photoURL: profileImage,
-          displayName: username,
           age,
           role,
+          email,
+          photoURL: profileImage,
+          displayName: username,
         })
         .catch((e) => {
           console.log(e);
