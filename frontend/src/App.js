@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar";
 import Welcome from "./pages/welcome";
 
 import { init } from "./firebase";
+import TeacherDashboard from "./pages/Teacher-Dashboard";
 
 init();
 
@@ -33,6 +34,7 @@ function App() {
               <Route exact path="/register" element={<Register />} />
               <Route exact path="/tutor" element={<Chat />} />
               <Route exact path="/" element={<Welcome />} />
+              <Route exact path="/teacher-dashboard" element={<TeacherDashboard />} />
               <Route
                 exact
                 path="/"
