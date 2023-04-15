@@ -1,12 +1,12 @@
 import { useState, useContext } from 'react';
 import swal from 'sweetalert';
-import { AppContext } from '../context/AppContext';
+import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 function Login({ history }){
     const [formData, setFormData] = useState(null);
-    const { setCurrentUser } = useContext(AppContext);
+    const { setCurrentUser } = useContext(AuthContext);
     const [error, setError] = useState(null);
     
     const handleChange = (e) => {
