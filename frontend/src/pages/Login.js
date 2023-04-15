@@ -35,7 +35,9 @@ function Login({ history }) {
             "linear-gradient(180deg, #7B7B87 0%, #DFEFF1 33.33%, #1E54B7 66.67%, #23408F 100%)",
           height: "100%",
         }}
-      ></Grid>
+      >
+        <img src="./logo.svg" />
+      </Grid>
 
       <Grid item xs={6}>
         <Typography
