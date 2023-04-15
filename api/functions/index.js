@@ -18,9 +18,9 @@ admin.initializeApp({
 
 admin.firestore().settings({ ignoreUndefinedProperties: true });
 
-app.post("/users/create-account", async (req, res) => {
+app.post("/user", async (req, res) => {
   const { username, age, role, password, email } = req.body;
-
+  console.log("In the create user endpoint");
   try {
     // if(role !== 'teacher') {
     //    res.status(500).send({ message: 'Please choose a valid user role.' })
@@ -29,23 +29,6 @@ app.post("/users/create-account", async (req, res) => {
 
     const uid = getFirestore().collection("users").doc().id;
     const profileImage = "https://picsum.photos/200/300";
-
-    await admin
-      .auth()
-      .createUser({
-        uid,
-        displayName: username,
-        age,
-        photoURL: profileImage,
-        password,
-        email,
-      })
-      .then(() => console.log("success"))
-      .catch(() => {
-        throw {
-          message: "Unable to create new user account. Please try again.",
-        };
-      });
 
     if (role === "teacher") {
       const student_uids = [];
@@ -89,7 +72,8 @@ app.post("/users/create-account", async (req, res) => {
           age,
           role,
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e);
           throw {
             message: "Unable to create new user account. Please try again.",
           };
@@ -116,6 +100,7 @@ app.post("/users/create-account", async (req, res) => {
 
     res.status(200).send({ message: "Account created successfully!" });
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 });
