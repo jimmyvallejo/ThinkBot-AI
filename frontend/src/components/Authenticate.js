@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 const Authenticate = ({ component: Component, ...rest }) => {
   const { user } = useContext(AuthContext);
 
-  return user ? <Component /> : <Navigate to="/login" replace />;
+  return true ? <Component {...rest} /> : <Navigate to="/login" replace />;
 };
 
 export default Authenticate;

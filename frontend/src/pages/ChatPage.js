@@ -42,7 +42,7 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    if (user?.role === "teacher") navigate("/teacher-dashboard");
+    // if (user?.role === "teacher") navigate("/teacher-dashboard");
   }, [user]);
 
   useEffect(() => {
