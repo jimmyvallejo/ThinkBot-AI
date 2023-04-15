@@ -5,18 +5,18 @@ export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  //   const [loading, setLoading] = useState(false);
-  //   const history = useHistory();
 
   useEffect(() => {
     const subscriber = onAuthStateChanged(getAuth(), async (authUser) => {
-      if (authUser?.uid && !user) {
-        const data = await get(`/users/${authUser.uid}`);
+      try {
+        if (authUser?.uid && !user) {
+          const data = await get(`/users/${authUser.uid}`);
 
-        setUser(data.data);
-      } else {
-        setUser(null);
-      }
+          setUser(data.data);
+        } else {
+          setUser(null);
+        }
+      } catch (e) {}
     });
 
     return subscriber;
@@ -26,6 +26,7 @@ export const AuthContextProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+        setUser,
       }}
     >
       {children}

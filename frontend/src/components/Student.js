@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import swal from "sweetalert";
+import { AuthContext } from "../context/AuthContext";
 import { post } from "../utils/api";
 import { Link } from "react-router-dom";
 
 function Student({ history }) {
+  const context = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -16,6 +18,8 @@ function Student({ history }) {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    console.log("In the handleRegister function");
+    console.log(context.loadingUser);
 
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -25,17 +29,22 @@ function Student({ history }) {
       );
 
       if (userCredential.user) {
-        await post("/user", {
+        const user = {
           username,
           email,
           password,
           age,
           uid: userCredential.user.uid,
           role: "student",
-        });
+        };
+
+        await post("/user", user);
+        context.setUser(user);
       }
     } catch (e) {
       console.error(e);
+    } finally {
+      context.setLoadingUser(false);
     }
   };
 

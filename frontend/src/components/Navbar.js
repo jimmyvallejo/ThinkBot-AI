@@ -1,12 +1,13 @@
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { signOut, getAuth } from "firebase/auth";
-import { useState } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
+  const { user } = useContext(AuthContext);
   const handleSignout = () => signOut(getAuth());
 
   const [role, setRole] = useState("teacher");
-  const [loggedIn, setLoggedIn] = useState(true);
 
   return (
     <nav>
@@ -26,13 +27,17 @@ const Navbar = () => {
             Dashboard
           </Link>
         )}
-        <Link className="navItem" to={"/login"}>
-          Login
-        </Link>
-        <Link className="navItem" to={"/register"}>
-          Signup
-        </Link>
-        {loggedIn && (
+        {!user && (
+          <Link className="navItem" to={"/login"}>
+            Login
+          </Link>
+        )}
+        {!user && (
+          <Link className="navItem" to={"/register"}>
+            Signup
+          </Link>
+        )}
+        {user && (
           <Link className="navItem" onClick={handleSignout}>
             Logout
           </Link>
