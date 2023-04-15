@@ -1,26 +1,32 @@
 import { useState, useContext } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import swal from "sweetalert";
+import { Grid, Typography, MenuItem } from "@mui/material";
+import { css } from "@emotion/react";
+import TextInput from "./TextInput";
 import { AuthContext } from "../context/AuthContext";
 import { post } from "../utils/api";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Button from "../components/Buttton";
+
+const underlineStyle = {
+  textDecoration: "underline",
+  fontWeight: 800,
+};
 
 function Student({ history }) {
+  const navigate = useNavigate();
   const context = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [age, setAge] = useState("");
+  const [role, setRole] = useState("");
 
   const [error, setError] = useState(null);
 
   const age_options = [5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18];
 
   const handleRegister = async (e) => {
-    e.preventDefault();
-    console.log("In the handleRegister function");
-    console.log(context.loadingUser);
-
     try {
       const userCredential = await createUserWithEmailAndPassword(
         getAuth(),
@@ -47,56 +53,121 @@ function Student({ history }) {
   };
 
   return (
-    <div id="login">
-      <h1>Student Registration</h1>
-      <form onSubmit={handleRegister}>
-        <label id="email">Email </label>
-        <input
-          type="email"
-          name="email"
-          onChange={(e) => setEmail(e.target.value)}
-        ></input>
-        <label id="email">Username </label>
-        <input
-          type="username"
-          name="username"
-          onChange={(e) => setUsername(e.target.value)}
-        ></input>
-        <label>
-          How Old are You?:
-          <select
-            value={null}
-            onChange={(e) => setAge(parseInt(e.target.value))}
-          >
-            <option value="">How old are you?</option>
-            {age_options.map((age) => (
-              <option key={age} value={age}>
-                {age}
-              </option>
-            ))}
-          </select>
-        </label>
-        <div id="passlabel">
-          <label className="passwordLabel">Password </label>
-          <input
-            className="passwordInput"
-            type="password"
-            name="password"
+    <Grid container style={{ height: "100vh" }}>
+      <Grid
+        item
+        xs={6}
+        style={{
+          background:
+            "linear-gradient(180deg, #7B7B87 0%, #DFEFF1 33.33%, #1E54B7 66.67%, #23408F 100%)",
+          height: "100%",
+        }}
+      ></Grid>
+      <Grid item xs={6}>
+        <Typography
+          variant="h1"
+          align="center"
+          style={{
+            fontSize: "64px",
+            fontWeight: 700,
+          }}
+        >
+          Create an Account
+        </Typography>
+        <Typography
+          variant="h3"
+          align="center"
+          style={{
+            fontSize: "28px",
+            fontWeight: 300,
+          }}
+        >
+          Are you a <span style={underlineStyle}>student</span> or a{" "}
+          <span style={underlineStyle}>teacher?</span>
+        </Typography>
+
+        <Grid item xs={12} style={{ textAlign: "center", marginTop: "4rem" }}>
+          <TextInput
+            label="Email"
+            placeholder="Enter your email"
+            onChange={(e) => setEmail(e.target.value)}
+            style={{ width: "60%" }}
+          />
+        </Grid>
+        <Grid item xs={12} style={{ textAlign: "center", marginTop: "1rem" }}>
+          <TextInput
+            label="Username"
+            placeholder="Create username"
+            onChange={(e) => setUsername(e.target.value)}
+            style={{ width: "60%" }}
+          />
+        </Grid>
+        <Grid item xs={12} style={{ textAlign: "center", marginTop: "1rem" }}>
+          <TextInput
+            label="Password"
+            placeholder="Create password"
             onChange={(e) => setPassword(e.target.value)}
-          ></input>
-        </div>
-        {error && <p>Error: {error}</p>}
-        <div>
-          <button className="loginBtn" type="submit">
-            Register
-          </button>
-        </div>
-      </form>
-      <div>
-        <p>New Here</p>
-        <Link to="/register">Click here to make an account</Link>
-      </div>
-    </div>
+            style={{ width: "60%" }}
+          />
+        </Grid>
+        <Grid item xs={12} style={{ textAlign: "center", marginTop: "1rem" }}>
+          <TextInput
+            label="Role"
+            placeholder="Pick Role"
+            select
+            onChange={(e) => setRole(e.target.value)}
+            style={{ width: "60%" }}
+          >
+            <MenuItem key="student" value="student">
+              Student
+            </MenuItem>
+            <MenuItem key="teacher" value="teacher">
+              Teacher
+            </MenuItem>
+          </TextInput>
+        </Grid>
+
+        {role === "student" && (
+          <Grid item xs={12} style={{ textAlign: "center", marginTop: "1rem" }}>
+            <TextInput
+              label="Age"
+              placeholder="Select age"
+              select
+              onChange={(e) => setRole(e.target.value)}
+              style={{ width: "60%" }}
+            >
+              {age_options.map((age) => (
+                <MenuItem key={age} value={age}>
+                  {age}{" "}
+                </MenuItem>
+              ))}
+            </TextInput>
+          </Grid>
+        )}
+
+        <Grid style={{ marginTop: "1rem", textAlign: "center" }} item xs={12}>
+          <Button onClick={handleRegister}>Sign up</Button>
+        </Grid>
+
+        <Typography
+          variant="body1"
+          style={{ marginTop: "1rem", fontWeight: 700, textAlign: "center" }}
+        >
+          Already have login?{" "}
+          <span
+            onClick={() => navigate("/login")}
+            style={{
+              textDecoration: "underline",
+              fontWeight: 600,
+              color: "blue",
+              cursor: "pointer",
+            }}
+          >
+            click here
+          </span>
+        </Typography>
+      </Grid>
+    </Grid>
   );
 }
 
