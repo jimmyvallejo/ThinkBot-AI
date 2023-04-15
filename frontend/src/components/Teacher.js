@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-function Login({ history }){
+function Teacher({ history }){
     const [formData, setFormData] = useState(null);
     const { setCurrentUser } = useContext(AuthContext);
     const [error, setError] = useState(null);
@@ -29,7 +29,7 @@ function Login({ history }){
 
     return(
         <div id="login">
-        <h1>Login</h1>
+        <h1>Teacher Registration</h1>
             <form onSubmit={handleLogin}>
                 <label id="email">Email </label>
                 <input
@@ -57,10 +57,10 @@ function Login({ history }){
             </form>
             <div>
                 <p>New Here</p>
-                <Link to="/Register">Click here to make an account</Link>
+                <Link to="/register">Click here to make an account</Link>
             </div>
     </div>
     )
 }
 
-export default Login
+export default Teacher
