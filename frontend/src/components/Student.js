@@ -78,7 +78,7 @@ function Student({ history }) {
           variant="h3"
           align="center"
           style={{
-            fontSize: "28px",
+            fontSize: "24px",
             fontWeight: 300,
           }}
         >
