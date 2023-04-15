@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { AuthContextProvider } from "./context/AuthContext";
 import Authenticate from "./components/Authenticate";
@@ -23,9 +23,6 @@ const theme = createTheme({
 });
 
 function App() {
-  
- 
-  
   return (
     <AuthContextProvider>
       <ChatContextProvider>
@@ -35,9 +32,17 @@ function App() {
             <Routes>
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/register" element={<Register />} />
-              <Route exact path="/tutor" element={<Chat />} />
+              <Route
+                exact
+                path="/tutor"
+                element={<Authenticate component={Chat} />}
+              />
               <Route exact path="/" element={<Welcome />} />
-              <Route exact path="/teacher-dashboard" element={<TeacherDashboard />} />
+              <Route
+                exact
+                path="/teacher-dashboard"
+                element={<Authenticate component={TeacherDashboard} />}
+              />
               <Route
                 exact
                 path="/"

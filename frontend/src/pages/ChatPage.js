@@ -1,69 +1,89 @@
-import { useEffect, useState, useRef, useContext} from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import { Configuration, OpenAIApi } from "openai";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { Dna } from "react-loader-spinner";
 import axios from "axios";
 import { ChatContext } from "../context/ChatContext";
 
 const Chat = () => {
-    
-const { setSubject, classSubject, showChat, setShowChat,saveConvo, role, setRole } = useContext(ChatContext)
+  const navigate = useNavigate();
 
-const [age, setAge] = useState("");
+  const {
+    setSubject,
+    classSubject,
+    showChat,
+    setShowChat,
+    saveConvo,
+    role,
+    setRole,
+  } = useContext(ChatContext);
+  const { user } = useContext(AuthContext);
 
-const [name, setName] = useState("");
+  const [age, setAge] = useState("");
 
-const [dataLoaded, setDataLoaded] = useState(false);
+  const [name, setName] = useState("");
 
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-
-useEffect(() => {
-  (async () => {
-    try {
-      const res = await axios.get(
-        "http://127.0.0.1:5001/miami-hackathon-ai/us-central1/api/users/my-test-id"
-      );
-      console.log(res);
-      setAge(res.data.age);
-      setName(res.data.displayName);
-      setRole(res.data.role)
-      setDataLoaded(true); // Set dataLoaded to true after setting age and name
-    } catch (e) {}
-  })();
-}, []);
-
-useEffect(() => {
-  if (dataLoaded) {
-    const fetchFirst = async () => {
+  useEffect(() => {
+    (async () => {
       try {
-        const messages = [
-          {
-            role: "user",
-            content: `Please greet me as if I am a student who just walked in to class, my name is ${name}.`,
-          },
-        ];
-        const result = await getChatCompletion(messages);
-        console.log(result.jsonBody.completion.content);
-        setConversation([
-          { role: "user", content: messages[0].content },
-          {
-            role: "assistant",
-            content: result.jsonBody.completion.content,
-          },
-        ]);
-      } catch (error) {
-        console.error("Error fetching first response:", error);
-      }
-    };
+        const res = await axios.get(
+          "http://127.0.0.1:5001/miami-hackathon-ai/us-central1/api/users/my-test-id"
+        );
+        console.log(res);
+        setAge(res.data.age);
+        setName(res.data.displayName);
+        setRole(res.data.role);
+        setDataLoaded(true); // Set dataLoaded to true after setting age and name
+      } catch (e) {}
+    })();
+  }, []);
 
-    fetchFirst();
-  }
-}, [dataLoaded]);
+  useEffect(() => {
+    if (user?.role === "teacher") navigate("/teacher-dashboard");
+  }, [user]);
 
+  useEffect(() => {
+    if (dataLoaded) {
+      const fetchFirst = async () => {
+        try {
+          const messages = [
+            {
+              role: "user",
+              content: `Please greet me as if I am a student who just walked in to class, my name is ${name}.`,
+            },
+          ];
+          const result = await getChatCompletion(messages);
+          console.log(result.jsonBody.completion.content);
+          setConversation([
+            { role: "user", content: messages[0].content },
+            {
+              role: "assistant",
+              content: result.jsonBody.completion.content,
+            },
+          ]);
+        } catch (error) {
+          console.error("Error fetching first response:", error);
+        }
+      };
 
+      fetchFirst();
+    }
+  }, [dataLoaded]);
 
   const handleLike = (elem) => {
-    let question = conversation.indexOf(conversation.find((message) => message.content === elem)) -1
-    setLike({ uid: "my-test-id", question: conversation[question].content, answer: elem, subject: holdSubject });
+    let question =
+      conversation.indexOf(
+        conversation.find((message) => message.content === elem)
+      ) - 1;
+    setLike({
+      uid: "my-test-id",
+      question: conversation[question].content,
+      answer: elem,
+      subject: holdSubject,
+    });
   };
 
   const apiKey = "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";
@@ -107,43 +127,37 @@ useEffect(() => {
 
   const [isLoading, setLoading] = useState(null);
 
-  const [rows, setRows] = useState(1)
+  const [rows, setRows] = useState(1);
 
   const containerRef = useRef(null);
 
-  
+  const setTutor = (subject) => {
+    setHoldSubject(subject);
+    if (subject === "math") {
+      setSubject("do not give me the answer only explain to me the logic");
+      setShowChat(true);
+    } else if (subject === "history") {
+      setSubject("");
+      setShowChat(true);
+    } else if (subject === "science") {
+      setSubject("explain this to me in a way that uses real world examples");
+      setShowChat(true);
+    } else if (subject === "literature") {
+      setSubject(
+        "help me with writing and literature ideas only, do not write entire stories or poems for me"
+      );
+      setShowChat(true);
+    }
+  };
 
- const setTutor = (subject) => {
-  setHoldSubject(subject);
-  if (subject === "math") {
-     setSubject("do not give me the answer only explain to me the logic");
-     setShowChat(true);
-   } else if (subject === "history") {
-     setSubject("");
-     setShowChat(true);
-   } else if (subject === "science") {
-     setSubject("explain this to me in a way that uses real world examples");
-     setShowChat(true);
-   } else if (subject === "literature") {
-     setSubject(
-       "help me with writing and literature ideas only, do not write entire stories or poems for me"
-     );
-     setShowChat(true);
-   }
-   
- };
+  const [like, setLike] = useState({});
 
- const [like, setLike] = useState({});
-
-
- const [holdSubject, setHoldSubject] = useState("")
-
- 
+  const [holdSubject, setHoldSubject] = useState("");
 
   useEffect(() => {
     (async () => {
       try {
-         await axios.post(
+        await axios.post(
           "http://127.0.0.1:5001/miami-hackathon-ai/us-central1/api/users/createQuestion",
           like
         );
@@ -153,8 +167,6 @@ useEffect(() => {
       }
     })();
   }, [like]);
-
- 
 
   useEffect(() => {
     scrollToBottom();
@@ -218,8 +230,8 @@ useEffect(() => {
 
   const rowFunc = (e) => {
     let hundred = e.length;
-    console.log(hundred)
-  
+    console.log(hundred);
+
     if (hundred >= 500) {
       setRows(5);
     } else if (hundred >= 400) {
@@ -231,16 +243,13 @@ useEffect(() => {
     } else {
       setRows(1);
     }
-    console.log(rows)
+    console.log(rows);
   };
-    
-  
-  
-  const handleChange = (e) => {
-     setUserInput(e)
-     rowFunc(e)
 
-  }
+  const handleChange = (e) => {
+    setUserInput(e);
+    rowFunc(e);
+  };
 
   return (
     <div className="GPT">
@@ -283,9 +292,9 @@ useEffect(() => {
       ) : (
         <div className="bigContainer">
           <div className="response">
-          <img className="aiPic" src="./robot.png"></img>
+            <img className="aiPic" src="./little-robot.png"></img>
             <h1>AI Tutor</h1>
-            
+
             {isLoading ? (
               <div className="loader-container">
                 <Dna className="dna" color="#00BFFF" height={100} width={100} />
@@ -308,7 +317,6 @@ useEffect(() => {
                       </strong>
                       {elem.content}
                     </p>
-                    
                   </div>
                 );
               })
