@@ -19,7 +19,7 @@ admin.initializeApp({
 admin.firestore().settings({ ignoreUndefinedProperties: true });
 
 app.post("/user", async (req, res) => {
-  const { username, age, role, password, email, uid } = req.body;
+  const { username, age, role, password, email } = req.body;
 
   try {
     // if(role !== 'teacher') {
@@ -27,6 +27,7 @@ app.post("/user", async (req, res) => {
     //    return
     // }
 
+    const uid = getFirestore().collection('users').doc().id
     const profileImage = "https://picsum.photos/200/300";
 
     if (role === "teacher") {
@@ -173,8 +174,9 @@ app.get("/users/:uid", async (req, res) => {
   return res.status(200).send(user);
 });
 
-app.get("/users/getTeacherDashboard", async (req, res) => {
-  const { uid } = req.body;
+app.get("/teacher/:uid", async (req, res) => {
+  console.log('s')
+  const { uid } = req.params;
   const students = [];
   let totalNumberOfQuestions = 0;
 

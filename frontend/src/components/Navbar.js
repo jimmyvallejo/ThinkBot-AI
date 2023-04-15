@@ -13,9 +13,10 @@ import { useLocation } from "react-router-dom";
 
 
 const Navbar = () => {
+  const location = useLocation();
   const { user } = useContext(AuthContext);
 
-  const location = useLocation();
+
   
   const {setShowChat, setSubject, role} = useContext(ChatContext)
 
@@ -30,12 +31,13 @@ const Navbar = () => {
     
     const [loggedIn, setLoggedIn] = useState(true)
 
-    const handleChange = () => {
-      setShowChat(null);
-       setSubject(null);
-       
-    
-      };
+  const handleChange = () => {
+    setShowChat(null);
+    setSubject(null);
+  };
+
+  if (location.pathname === "/login" || location.pathname === "/register" || location.pathname === '/' || location.pathname === '/teacher-dashboard')
+    return null;
 
   return (
     <nav>
