@@ -41,7 +41,7 @@ function Student({ history }) {
           password,
           age,
           uid: userCredential.user.uid,
-          role: "student",
+          role,
         };
 
         await post("/user", user);
