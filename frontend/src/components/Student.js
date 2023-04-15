@@ -1,7 +1,6 @@
 import { useState, useContext } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Grid, Typography, MenuItem } from "@mui/material";
-import { css } from "@emotion/react";
 import TextInput from "./TextInput";
 import { AuthContext } from "../context/AuthContext";
 import { post } from "../utils/api";
@@ -21,8 +20,6 @@ function Student({ history }) {
   const [password, setPassword] = useState("");
   const [age, setAge] = useState("");
   const [role, setRole] = useState("");
-
-  const [error, setError] = useState(null);
 
   const age_options = [5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18];
 

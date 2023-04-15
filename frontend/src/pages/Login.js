@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import swal from "sweetalert";
 import { Link } from "react-router-dom";
 
 function Login({ history }) {

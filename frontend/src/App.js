@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Chat from "./pages/ChatPage";
 import Navbar from "./components/Navbar";
+import Welcome from "./pages/welcome"
 
 import { init } from "./firebase";
 
@@ -28,6 +29,7 @@ function App() {
           <Routes>
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/register" element={<Register />} />
+            <Route exact path="/welcome" element={<Welcome />} />
             <Route exact path="/tutor" element={<Chat />} />
             <Route exact path="/" element={<Authenticate component={Home} />} />
           </Routes>
