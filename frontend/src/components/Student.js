@@ -106,6 +106,7 @@ function Student({ history }) {
           <TextInput
             label="Password"
             placeholder="Create password"
+            type="password"
             onChange={(e) => setPassword(e.target.value)}
             style={{ width: "60%" }}
           />

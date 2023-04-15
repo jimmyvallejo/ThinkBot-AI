@@ -21,7 +21,7 @@ function Login({ history }) {
     try {
       await signInWithEmailAndPassword(getAuth(), email, password);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
