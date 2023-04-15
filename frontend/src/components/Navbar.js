@@ -3,7 +3,7 @@ import { signOut, getAuth } from "firebase/auth";
 import { useState } from "react";
 
 const Navbar = () => {
-  const clearStorage = () => signOut(getAuth());
+  const handleSignout = () => signOut(getAuth());
 
   const [role, setRole] = useState("teacher");
   const [loggedIn, setLoggedIn] = useState(true);
@@ -29,11 +29,11 @@ const Navbar = () => {
         <Link className="navItem" to={"/login"}>
           Login
         </Link>
-        <Link className="navItem" to={"/signup"}>
+        <Link className="navItem" to={"/register"}>
           Signup
         </Link>
         {loggedIn && (
-          <Link className="navItem" onClick={clearStorage}>
+          <Link className="navItem" onClick={handleSignout}>
             Logout
           </Link>
         )}

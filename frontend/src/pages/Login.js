@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import swal from "sweetalert";
-// import { AuthContext } from '../context/AuthContext';
-import axios from "axios";
 import { Link } from "react-router-dom";
 
 function Login({ history }) {
@@ -15,11 +13,7 @@ function Login({ history }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        getAuth(),
-        email,
-        password
-      );
+      await signInWithEmailAndPassword(getAuth(), email, password);
     } catch (e) {
       console.log(e);
     }

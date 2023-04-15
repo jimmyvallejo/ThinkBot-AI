@@ -1,12 +1,10 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import swal from "sweetalert";
-// import { AuthContext } from "../context/AuthContext";
-import axios from "axios";
+import { post } from "../utils/api";
 import { Link } from "react-router-dom";
 
 function Student({ history }) {
-  const [formData, setFormData] = useState(null);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -27,17 +25,14 @@ function Student({ history }) {
       );
 
       if (userCredential.user) {
-        await axios.post(
-          "http://127.0.0.1:5001/miami-hackathon-ai/us-central1/api/user",
-          {
-            username,
-            email,
-            password,
-            age,
-            uid: userCredential.user.uid,
-            role: "student",
-          }
-        );
+        await post("/user", {
+          username,
+          email,
+          password,
+          age,
+          uid: userCredential.user.uid,
+          role: "student",
+        });
       }
     } catch (e) {
       console.error(e);

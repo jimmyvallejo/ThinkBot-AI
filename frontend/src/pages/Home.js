@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import axios from "axios";
 
 function Home() {
   return <h1>Home</h1>;
