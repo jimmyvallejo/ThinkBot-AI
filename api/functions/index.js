@@ -107,7 +107,7 @@ app.post("/user", async (req, res) => {
 
 app.post("/users/createQuestion", async (req, res) => {
   console.log("test");
-  const { question, uid } = req.body;
+  const { question, uid, answer } = req.body;
 
   try {
     await getFirestore()
@@ -123,6 +123,7 @@ app.post("/users/createQuestion", async (req, res) => {
             questions: FieldValue.arrayUnion({
               createdAt: timestamp,
               question,
+              answer
             }),
           },
           { merge: true }
@@ -137,6 +138,8 @@ app.post("/users/createQuestion", async (req, res) => {
     res.status(500).send(error);
   }
 });
+
+
 
 app.get("/users/:uid", async (req, res) => {
   const { uid } = req.params;

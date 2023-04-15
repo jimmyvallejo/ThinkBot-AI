@@ -7,7 +7,12 @@ const Navbar = () => {
   const { user } = useContext(AuthContext);
   const handleSignout = () => signOut(getAuth());
 
-  const [role, setRole] = useState("teacher");
+    const clearStorage = () =>{
+        console.log("hi")
+    }
+
+    const [role, setRole] = useState("teacher")
+    const [loggedIn, setLoggedIn] = useState(true)
 
   return (
     <nav>
