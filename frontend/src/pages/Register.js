@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Grid, Typography, MenuItem } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import { css } from "@emotion/react";
 import TextInput from "../components/TextInput";
 import { AuthContext } from "../context/AuthContext";
@@ -21,12 +22,14 @@ function Register({ history }) {
   const [password, setPassword] = useState("");
   const [age, setAge] = useState("");
   const [role, setRole] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [error, setError] = useState(null);
 
   const age_options = [5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18];
 
   const handleRegister = async (e) => {
+    setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(
         getAuth(),
@@ -46,9 +49,17 @@ function Register({ history }) {
 
         await post("/user", user);
         context.setUser(user);
+
+        if (role === "student") {
+          navigate("/tutor");
+        } else {
+          navigate("/teacher-dashboard");
+        }
       }
     } catch (e) {
       console.error(e);
+    } finally {
+      setLoading(true);
     }
   };
 
@@ -179,7 +190,8 @@ function Register({ history }) {
         )}
 
         <Grid style={{ marginTop: "1rem", textAlign: "center" }} item xs={12}>
-          <Button onClick={handleRegister}>Sign up</Button>
+          {loading && <CircularProgress />}
+          {!loading && <Button onClick={handleRegister}>Sign up</Button>}
         </Grid>
 
         <Typography

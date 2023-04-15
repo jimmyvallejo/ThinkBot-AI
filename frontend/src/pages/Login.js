@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Grid, Typography } from "@mui/material";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import CircularProgress from "@mui/material/CircularProgress";
 import TextInput from "../components/TextInput";
 import Button from "../components/Buttton";
 import swal from "sweetalert";
@@ -15,13 +16,18 @@ function Login({ history }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
       await signInWithEmailAndPassword(getAuth(), email, password);
+      navigate("/tutor");
     } catch (e) {
       console.error(e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -108,7 +114,8 @@ function Login({ history }) {
         </Grid>
 
         <Grid style={{ marginTop: "4rem", textAlign: "center" }} item xs={12}>
-          <Button onClick={handleLogin}>Log in</Button>
+          {loading && <CircularProgress />}
+          {!loading && <Button onClick={handleLogin}>Log in</Button>}
         </Grid>
 
         <Typography
