@@ -14,6 +14,7 @@ const Button = (props) => {
         color: "white",
       }}
       variant="outlined"
+      {...props}
     >
       {props.children}
     </MuiButton>
