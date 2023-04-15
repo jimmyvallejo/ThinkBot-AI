@@ -247,6 +247,10 @@ code {
 
 .aiPic{
   width: 75px;
-  margin-right: 90px;
+  margin-right: 97px;
   margin-top: 20px;
+}
+
+.aiTutor {
+  font-size: 50px !important;
 }

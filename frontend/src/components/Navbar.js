@@ -34,6 +34,7 @@ const Navbar = () => {
   const handleChange = () => {
     setShowChat(null);
     setSubject(null);
+    console.log(user)
   };
 
   if (location.pathname === "/login" || location.pathname === "/register" || location.pathname === '/' || location.pathname === '/teacher-dashboard')
