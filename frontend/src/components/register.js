@@ -13,7 +13,7 @@ const underlineStyle = {
   fontWeight: 800,
 };
 
-function Student({ history }) {
+function Register({ history }) {
   const navigate = useNavigate();
   const context = useContext(AuthContext);
   const [email, setEmail] = useState("");
@@ -61,37 +61,9 @@ function Student({ history }) {
           background:
             "linear-gradient(180deg, #7B7B87 0%, #DFEFF1 33.33%, #1E54B7 66.67%, #23408F 100%)",
           height: "100%",
-          textAlign: "center",
-          paddingTop: "4.3rem",
         }}
-      >
-        <img src="./logo.svg" />
-        <Typography
-          variant="h1"
-          align="center"
-          style={{
-            fontSize: "64px",
-            fontWeight: 700,
-            color: "white",
-          }}
-        >
-          Thinkbot
-        </Typography>
-        <Typography
-          variant="h3"
-          align="center"
-          style={{
-            fontSize: "24px",
-            fontWeight: 500,
-            marginTop: "1rem",
-            color: "white",
-          }}
-        >
-          Personal Student AI Robot Tutor
-        </Typography>
-        <img style={{ marginTop: "3rem" }} src="./mdc.svg" />
-      </Grid>
-      <Grid item xs={6} style={{ paddingTop: "9rem" }}>
+      ></Grid>
+      <Grid item xs={6}>
         <Typography
           variant="h1"
           align="center"
@@ -200,4 +172,4 @@ function Student({ history }) {
   );
 }
 
-export default Student;
+export default Register;

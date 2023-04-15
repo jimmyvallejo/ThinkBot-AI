@@ -6,9 +6,10 @@ import Authenticate from "./components/Authenticate";
 import { ChatContextProvider } from "./context/ChatContext";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Register from "./components/register";
 import Chat from "./pages/ChatPage";
 import Navbar from "./components/Navbar";
+import Welcome from "./pages/welcome";
 
 import { init } from "./firebase";
 
@@ -31,6 +32,7 @@ function App() {
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/register" element={<Register />} />
               <Route exact path="/tutor" element={<Chat />} />
+              <Route exact path="/" element={<Welcome />} />
               <Route
                 exact
                 path="/"

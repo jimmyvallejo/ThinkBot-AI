@@ -1,5 +1,4 @@
 import * as React from 'react';
-/* import Button from '@mui/material/Button'; */
 import Button from "../components/Buttton";
 import CssBaseline from '@mui/material/CssBaseline';
 import Paper from '@mui/material/Paper';
@@ -15,9 +14,9 @@ const theme = createTheme();
 export default function Welcome() {
   const blueColor = `rgba(30, 84, 183, 1)`;
   const but_style = {
-    width: '600px',
-    padding: "60px",
-    fontFamily: "Sans-Serif"
+    width: '343px',
+    height: '90px',
+    marginBottom: 20,
   }
   return (
     <ThemeProvider theme={theme}>
@@ -34,7 +33,7 @@ export default function Welcome() {
             backgroundPosition: 'center',
           }}
         />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square> 
           <Box
             sx={{
               my: 8,
@@ -74,11 +73,11 @@ export default function Welcome() {
             with the help of AI giving our student the world
             </Typography>
             <Button style={but_style}
-                  to="/register"
+                  href="/register"
                 >
                   Sign Up
                 </Button>
-           <Button
+           <Button style={but_style}
                   href="/login"
                 >
                   Logins
