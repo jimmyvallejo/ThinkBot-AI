@@ -41,7 +41,7 @@ function Student({ history }) {
           password,
           age,
           uid: userCredential.user.uid,
-          role: "student",
+          role,
         };
 
         await post("/user", user);
@@ -106,6 +106,7 @@ function Student({ history }) {
           <TextInput
             label="Password"
             placeholder="Create password"
+            type="password"
             onChange={(e) => setPassword(e.target.value)}
             style={{ width: "60%" }}
           />
