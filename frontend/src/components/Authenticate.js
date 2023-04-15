@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
 
 const Authenticate = ({ component: Component, ...rest }) => {
-  //   const navigate = useNavigate();
-  //   const user = sessionStorage.getItem("user");
-  const user = {};
+  const { user } = useContext(AuthContext);
 
   return user ? <Component /> : <Navigate to="/login" replace />;
 };
