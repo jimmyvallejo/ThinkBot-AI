@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 
 function Home() {
+  //   useEffect(() => {
+  //     (async () => {
+  //       axios.get();
+  //     })();
+  //   });
+
   return <h1>Home</h1>;
 }
 

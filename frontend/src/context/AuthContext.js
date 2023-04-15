@@ -1,40 +1,41 @@
-import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
-import swal from 'sweetalert';
-import { useHistory } from 'react-router-dom';
+import React, { createContext, useState, useEffect } from "react";
+// import axios from 'axios';
+// import swal from 'sweetalert';
+// import { useHistory } from 'react-router-dom';
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  //   const [currentUser, setCurrentUser] = useState(null);
+  //   const [loading, setLoading] = useState(false);
+  //   const history = useHistory();
 
-  let user = sessionStorage.getItem('user');
+  //   let user = sessionStorage.getItem('user');
 
-  useEffect(() => {
-    user = sessionStorage.getItem('user');
-    if (user && !currentUser) {
-      axios
-        .get('/api/users/me', { withCredentials: true })
-        .then(({ data }) => {
-          setCurrentUser(data);
-        })
-        .catch((error) => {
-          swal('Oops!', error.toString());
-        });
-    }
-  }, [currentUser, user]);
+  //   useEffect(() => {
+  //     user = sessionStorage.getItem('user');
+  //     if (user && !currentUser) {
+  //       axios
+  //         .get('/api/users/me', { withCredentials: true })
+  //         .then(({ data }) => {
+  //           setCurrentUser(data);
+  //         })
+  //         .catch((error) => {
+  //           swal('Oops!', error.toString());
+  //         });
+  //     }
+  //   }, [currentUser, user]);
 
   return (
-    <AuthContext.Provider
-      value={{
-        currentUser,
-        setCurrentUser,
-        loading,
-        setLoading,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    // <AuthContext.Provider
+    //   value={{
+    //     currentUser,
+    //     setCurrentUser,
+    //     loading,
+    //     setLoading,
+    //   }}
+    // >
+    //   {children}
+    // </AuthContext.Provider>
+    <></>
   );
 };

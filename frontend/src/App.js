@@ -1,13 +1,12 @@
 import React from "react";
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { AuthContextProvider } from './context/AuthContext';
-import PrivateRoute from './components/PrivateRoute';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthContextProvider } from "./context/AuthContext";
+import Authenticate from "./components/Authenticate";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Chat from "./pages/ChatPage";
-import Navbar from "./components/Navbar"
-import './App.css';
+import Navbar from "./components/Navbar";
 
 import { init } from "./firebase";
 
@@ -15,17 +14,17 @@ init();
 
 function App() {
   return (
-    <AuthContextProvider>
-      <BrowserRouter>
+    // <AuthContextProvider>
+    <BrowserRouter>
       <Navbar />
-        <Switch>
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/tutor" element={<Chat />} />
-          <PrivateRoute exact path="/" component={Home} />
-        </Switch>
-      </BrowserRouter>
-    </AuthContextProvider>
+      <Routes>
+        <Route exact path="/login" elmement={<Login />} />
+        <Route exact path="/register" elmement={<Register />} />
+        <Route exact path="/tutor" element={<Chat />} />
+        <Route exact path="/" element={<Authenticate component={Home} />} />
+      </Routes>
+    </BrowserRouter>
+    // </AuthContextProvider>
   );
 }
 
