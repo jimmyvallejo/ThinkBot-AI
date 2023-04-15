@@ -107,7 +107,7 @@ app.post("/user", async (req, res) => {
 
 app.post("/users/createQuestion", async (req, res) => {
   console.log("test");
-  const { question, uid, answer } = req.body;
+  const { question, uid, answer, subject } = req.body;
 
   try {
     await getFirestore()
@@ -124,6 +124,7 @@ app.post("/users/createQuestion", async (req, res) => {
               createdAt: timestamp,
               question,
               answer,
+              subject,
             }),
           },
           { merge: true }
