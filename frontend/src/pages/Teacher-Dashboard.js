@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, SwipeableDrawer, Avatar, Box } from "@mui/material";
 import "../styles/teacher_dashboard.css";
-import { get } from "../utils/api";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Chart from "chart.js/auto";
-import { Doughnut } from "react-chartjs-2";
+
 
 Chart.register();
 
@@ -32,57 +31,14 @@ const TeacherDashboard = ({}) => {
     fetchTeacher();
   }, []);
 
-  useEffect(() => {
-    if (user?.role === "student") return navigate("/tutor");
-    if (!user?.role) return navigate("/login");
-  }, [user]);
+  // useEffect(() => {
+  //   if (user?.role === "student") return navigate("/tutor");
+  //   if (!user?.role) return navigate("/login");
+  // }, [user]);
 
   console.log(teacherDashboardData);
 
-  // const teacherDashboardData = {
-  //    uid: '123',
-  //    displayName: 'Kevin Lowery',
-  //    photoUrl: 'https://media.istockphoto.com/id/1338134319/photo/portrait-of-young-indian-businesswoman-or-school-teacher-pose-indoors.jpg?s=612x612&w=0&k=20&c=Dw1nKFtnU_Bfm2I3OPQxBmSKe9NtSzux6bHqa9lVZ7A=',
-  //    role: 'teacher',
-  //    students: [
-  //       {
-  //          uid: '8910',
-  //          displayName: 'Sam Cook',
-  //          photoUrl: 'https://media.istockphoto.com/id/1338134319/photo/portrait-of-young-indian-businesswoman-or-school-teacher-pose-indoors.jpg?s=612x612&w=0&k=20&c=Dw1nKFtnU_Bfm2I3OPQxBmSKe9NtSzux6bHqa9lVZ7A=',
-  //          role: 'student',
-  //          questions: [
-  //             {
-  //                topic: 'math',
-  //                createdAt: 1681500674,
-  //                question: 'How hungry can one get?'
-  //             },
-  //             {
-  //                topic: 'math',
-  //                createdAt: 1681500735,
-  //                question: 'Why, in general, do women live longer than men do?'
-  //             },
-  //          ]
-  //       },
-  //       {
-  //          uid: '432894',
-  //          displayName: 'Devin Messinh',
-  //          photoUrl: 'https://media.istockphoto.com/id/1161222735/photo/female-university-student-holding-a-small-tablet.jpg?s=612x612&w=0&k=20&c=iIBNzwiTq1tcglI0n8XYv0kN5SltT01Nqn3VqplUHuo=',
-  //          role: 'student',
-  //          questions: [
-  //             {
-  //                topic: 'history',
-  //                createdAt: 1681500674,
-  //                question: 'Hi'
-  //             },
-  //             {
-  //                topic: 'science',
-  //                createdAt: 1681500735,
-  //                question: 'testing 123?'
-  //             },
-  //          ]
-  //       }
-  //    ]
-  // }
+
 
   useEffect(() => {
     teacherDashboardData?.students?.map((student) => {
