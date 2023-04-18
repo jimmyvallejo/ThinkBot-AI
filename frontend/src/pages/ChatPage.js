@@ -18,6 +18,7 @@ const Chat = () => {
     role,
     setRole,
   } = useContext(ChatContext);
+  
   const { user } = useContext(AuthContext);
 
   const [age, setAge] = useState("");
@@ -41,10 +42,10 @@ const Chat = () => {
     })();
   }, []);
 
-  useEffect(() => {
-    if (user?.role === "teacher") navigate("/teacher-dashboard");
-    if (!user?.role) return navigate("/login");
-  }, [user]);
+  // useEffect(() => {
+  //   if (user?.role === "teacher") navigate("/teacher-dashboard");
+  //   if (!user?.role) return navigate("/login");
+  // }, [user]);
 
   useEffect(() => {
     if (dataLoaded) {
@@ -87,7 +88,9 @@ const Chat = () => {
     });
   };
 
-  const apiKey = "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";
+  const apiKey = process.env.REACT_APP_API_KEY;
+
+
 
   const configuration = new Configuration({
     apiKey: apiKey,

@@ -37,7 +37,7 @@ function Register({ history }) {
         password
       );
 
-      if (userCredential.user) {
+    
         const user = {
           username,
           email,
@@ -55,11 +55,11 @@ function Register({ history }) {
         } else {
           navigate("/teacher-dashboard");
         }
-      }
+      
     } catch (e) {
       console.error(e);
     } finally {
-      setLoading(true);
+      setLoading(false);
     }
   };
 
@@ -177,7 +177,7 @@ function Register({ history }) {
               label="Age"
               placeholder="Select age"
               select
-              onChange={(e) => setRole(e.target.value)}
+              onChange={(e) => setAge(e.target.value)}
               style={{ width: "60%" }}
             >
               {age_options.map((age) => (
