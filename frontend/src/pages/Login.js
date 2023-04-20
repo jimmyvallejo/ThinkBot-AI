@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, Typography } from "@mui/material";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import CircularProgress from "@mui/material/CircularProgress";
 import TextInput from "../components/TextInput";
 import Button from "../components/Buttton";
-import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
+import { baseUrl } from "../services/baseUrl";
 
 const underlineStyle = {
   textDecoration: "underline",
@@ -17,19 +19,40 @@ function Login({ history }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  const { authenticateUser, user } = useContext(AuthContext);
 
   const handleLogin = async () => {
     setLoading(true);
+    const login = {
+      email,
+      password,
+    };
+
     try {
-      await signInWithEmailAndPassword(getAuth(), email, password);
-      navigate("/tutor");
+      const results = await axios.post(
+        `${baseUrl}/auth/login`,
+        login
+      );
+
+      localStorage.setItem("authToken", results.data.token);
+      await authenticateUser();
     } catch (e) {
       console.error(e);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      if (user.role == "student") {
+        navigate("/tutor");
+      } else if (user.role == "teacher") {
+        navigate(`/teacher-dashboard`);
+      }
+    }
+  }, [user]);
 
   return (
     <Grid container style={{ height: "100vh" }}>

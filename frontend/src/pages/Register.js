@@ -1,13 +1,12 @@
-import { useState, useContext } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { useState, useContext, useEffect } from "react";
 import { Grid, Typography, MenuItem } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import { css } from "@emotion/react";
 import TextInput from "../components/TextInput";
 import { AuthContext } from "../context/AuthContext";
-import { post } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Buttton";
+import axios from "axios";
+import { baseUrl } from "../services/baseUrl";
 
 const underlineStyle = {
   textDecoration: "underline",
@@ -22,49 +21,74 @@ function Register({ history }) {
   const [password, setPassword] = useState("");
   const [age, setAge] = useState("");
   const [role, setRole] = useState("");
+  const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(false);
-
-  const [error, setError] = useState(null);
+  const [teacher, setTeacher] = useState("")
+  const [fullname, setFullName] = useState("")
+  const [profile_image, setProfileImage] = useState("")
 
   const age_options = [5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18];
 
-  const handleRegister = async (e) => {
-    setLoading(true);
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        getAuth(),
-        email,
-        password
-      );
 
-    
-        const user = {
-          username,
-          email,
-          password,
-          age,
-          uid: userCredential.user.uid,
-          role,
-        };
-
-        await post("/user", user);
-        context.setUser(user);
-
-        if (role === "student") {
-          navigate("/tutor");
-        } else {
-          navigate("/teacher-dashboard");
-        }
-      
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const result = await axios.get(`${baseUrl}/users`)
+        
+        console.log(result.data)
+         result.data.map((elem) => {
+          console.log(elem)
+          if (elem.role === "teacher"){
+           setUsers((prevItems) => [...prevItems, elem]);
+          }
+         })
+         console.log(users)
+      } catch(error) {
+        console.error(error)
+      }
     }
-  };
+    fetchUsers()
+  },[])
+
+
+  const handleRegister = async (e) => {
+  setLoading(true);
+  try {
+    const user = {
+      username,
+      email,
+      password,
+      age,
+      role,
+      teacher,
+      fullname,
+      profile_image
+    };
+      console.log(user)
+    await axios.post(`${baseUrl}/auth/signup`, user);
+    setLoading(false);
+    navigate("/login");
+  } catch (e) {
+    console.error(e);
+    setLoading(false);
+  }
+};
+
+const handleFileSubmit = (e) => {
+  let fileUpload = new FormData();
+  fileUpload.append("profile_image", e.target.files[0]);
+  axios.post(`${baseUrl}/auth/add-picture`, fileUpload)
+    .then((result) => {
+      console.log(result.data)
+      setProfileImage(result.data)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
   return (
-    <Grid container style={{ height: "100vh" }}>
+    <Grid encType="multipart/form-data" container style={{ height: "100vh" }}>
       <Grid
         item
         xs={6}
@@ -156,6 +180,27 @@ function Register({ history }) {
         </Grid>
         <Grid item xs={12} style={{ textAlign: "center", marginTop: "1rem" }}>
           <TextInput
+            label="Full Name"
+            placeholder="Full Name"
+            type="text"
+            onChange={(e) => setFullName(e.target.value)}
+            style={{ width: "60%" }}
+          />
+        </Grid>
+        <Grid item xs={12} style={{ textAlign: "center", marginTop: "1rem" }}>
+          <TextInput
+            label="Profile Picture"
+            type="file"
+            onChange={(e) => handleFileSubmit(e)}
+            style={{ width: "60%" }}
+            InputLabelProps={{
+              shrink: true,
+              classes: { root: "file-input-placeholder" },
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} style={{ textAlign: "center", marginTop: "1rem" }}>
+          <TextInput
             label="Role"
             placeholder="Pick Role"
             select
@@ -183,6 +228,23 @@ function Register({ history }) {
               {age_options.map((age) => (
                 <MenuItem key={age} value={age}>
                   {age}{" "}
+                </MenuItem>
+              ))}
+            </TextInput>
+          </Grid>
+        )}
+
+        {role === "student" && (
+          <Grid item xs={12} style={{ textAlign: "center", marginTop: "1rem" }}>
+            <TextInput
+              label="Teacher"
+              select
+              onChange={(e) => setTeacher(e.target.value)}
+              style={{ width: "60%" }}
+            >
+              {users.map((user) => (
+                <MenuItem key={user._id} value={user._id}>
+                  {user.name}{" "}
                 </MenuItem>
               ))}
             </TextInput>

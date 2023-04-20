@@ -1,11 +1,12 @@
-import { useState, useContext, } from "react";
+import { useState, useContext, useEffect, } from "react";
 import { Link } from "react-router-dom";
-import { signOut, getAuth } from "firebase/auth";
+
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 import Button from "./Buttton";
 import { colors } from "../styles/colors";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -14,22 +15,20 @@ import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const location = useLocation();
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
 
-
+  const navigate = useNavigate()
   
   const {setShowChat, setSubject, role} = useContext(ChatContext)
 
-  const handleSignout = () => signOut(getAuth());
+const handleSignout = () => {
+  setShowChat(null)
+  setSubject(null)
+  navigate('/')
+  logout();
+  
+};
 
-
-
-    const clearStorage = () =>{
-        console.log("hi")
-    }
-
-    
-    const [loggedIn, setLoggedIn] = useState(true)
 
   const handleChange = () => {
     setShowChat(null);
@@ -71,9 +70,9 @@ const Navbar = () => {
           </Link>
         )}
         {user && (
-          <Link className="navItem" onClick={handleSignout}>
+          <Button className="navItem" onClick={handleSignout}>
             Logout
-          </Link>
+          </Button>
         )}
       </div>
     </nav>

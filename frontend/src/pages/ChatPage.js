@@ -1,96 +1,73 @@
 import { useEffect, useState, useRef, useContext } from "react";
 import { Configuration, OpenAIApi } from "openai";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { Dna } from "react-loader-spinner";
+import { MagnifyingGlass } from "react-loader-spinner";
 import axios from "axios";
 import { ChatContext } from "../context/ChatContext";
+import { baseUrl } from "../services/baseUrl";
 
 const Chat = () => {
-  const navigate = useNavigate();
+  const { setSubject, classSubject, showChat, setShowChat, saveConvo } =
+    useContext(ChatContext);
 
-  const {
-    setSubject,
-    classSubject,
-    showChat,
-    setShowChat,
-    saveConvo,
-    role,
-    setRole,
-  } = useContext(ChatContext);
-  
   const { user } = useContext(AuthContext);
 
-  const [age, setAge] = useState("");
-
-  const [name, setName] = useState("");
-
-  const [dataLoaded, setDataLoaded] = useState(false);
-
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios.get(
-          "http://127.0.0.1:5001/miami-hackathon-ai/us-central1/api/users/my-test-id"
-        );
-        console.log(res);
-        setAge(res.data.age);
-        setName(res.data.displayName);
-        setRole(res.data.role);
-        setDataLoaded(true); // Set dataLoaded to true after setting age and name
-      } catch (e) {}
-    })();
-  }, []);
-
-  // useEffect(() => {
-  //   if (user?.role === "teacher") navigate("/teacher-dashboard");
-  //   if (!user?.role) return navigate("/login");
-  // }, [user]);
-
-  useEffect(() => {
-    if (dataLoaded) {
+    if (user) {
+      console.log(user);
       const fetchFirst = async () => {
-        try {
-          const messages = [
-            {
-              role: "user",
-              content: `Please greet me as if I am a student who just walked in to class, my name is ${name}.`,
-            },
-          ];
-          const result = await getChatCompletion(messages);
-          console.log(result.jsonBody.completion.content);
-          setConversation([
-            { role: "user", content: messages[0].content },
-            {
-              role: "assistant",
-              content: result.jsonBody.completion.content,
-            },
-          ]);
-        } catch (error) {
-          console.error("Error fetching first response:", error);
+        if (user) {
+          try {
+            const messages = [
+              {
+                role: "user",
+                content: `Please greet me as if I am a student who just walked in to class, my name is ${user.name}.`,
+              },
+            ];
+            const result = await getChatCompletion(messages);
+            console.log(result.jsonBody.completion.content);
+            setConversation([
+              { role: "user", content: messages[0].content },
+              {
+                role: "assistant",
+                content: result.jsonBody.completion.content,
+              },
+            ]);
+          } catch (error) {
+            console.error("Error fetching first response:", error);
+          }
         }
       };
 
       fetchFirst();
     }
-  }, [dataLoaded]);
+  }, [user]);
 
-  const handleLike = (elem) => {
+  const handleLike = (elem, index) => {
+    setLikedStatus((prevStatus) => ({
+      ...prevStatus,
+      [index]: !prevStatus[index],
+    }));
+
     let question =
       conversation.indexOf(
         conversation.find((message) => message.content === elem)
       ) - 1;
-    setLike({
-      uid: "my-test-id",
+    const likeData = {
       question: conversation[question].content,
       answer: elem,
       subject: holdSubject,
-    });
+    };
+    console.log(likeData);
+
+    axios
+      .patch(`${baseUrl}/users/add-to-liked/${user._id}`, likeData)
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const apiKey = process.env.REACT_APP_API_KEY;
-
-
 
   const configuration = new Configuration({
     apiKey: apiKey,
@@ -133,6 +110,8 @@ const Chat = () => {
 
   const [rows, setRows] = useState(1);
 
+  const [likedStatus, setLikedStatus] = useState({});
+
   const containerRef = useRef(null);
 
   const setTutor = (subject) => {
@@ -154,23 +133,7 @@ const Chat = () => {
     }
   };
 
-  const [like, setLike] = useState({});
-
   const [holdSubject, setHoldSubject] = useState("");
-
-  useEffect(() => {
-    (async () => {
-      try {
-        await axios.post(
-          "http://127.0.0.1:5001/miami-hackathon-ai/us-central1/api/users/createQuestion",
-          like
-        );
-      } catch (e) {
-        // You may want to log the error or handle it differently
-        console.error(e);
-      }
-    })();
-  }, [like]);
 
   useEffect(() => {
     scrollToBottom();
@@ -197,17 +160,17 @@ const Chat = () => {
       subjectAdded = userInput;
     }
 
-    if (age < 11) {
+    if (user.age < 11) {
       subjectAdded = subjectAdded.concat(
         " ",
         "and answer my question at an elementary school level"
       );
-    } else if (age > 11 && age < 14) {
+    } else if (user.age > 11 && user.age < 14) {
       subjectAdded = subjectAdded.concat(
         " ",
         "and answer my question at a middle school level"
       );
-    } else if (age > 14 || age === 14) {
+    } else if (user.age > 14 || user.age === 14) {
       subjectAdded = subjectAdded.concat(
         " ",
         "and answer my question at a high school level"
@@ -259,7 +222,11 @@ const Chat = () => {
     <div className="GPT">
       {!classSubject && classSubject !== "" && (
         <>
-          <h1 className="chatIntro">{`Hi ${name}, my name is Henry`}</h1>
+          <h1 className="chatIntro">
+            {user
+              ? `Hi ${user.name}, my name is Henry`
+              : "Hello, my name is Henry"}
+          </h1>
           <h1 className="tutor">I'm your personal AI tutor</h1>
           <h3>What would you like help with today?</h3>
         </>
@@ -301,7 +268,12 @@ const Chat = () => {
 
             {isLoading ? (
               <div className="loader-container">
-                <Dna className="dna" color="#00BFFF" height={100} width={100} />
+                <MagnifyingGlass
+                  className="dna"
+                  color="#00BFFF"
+                  height={100}
+                  width={100}
+                />
               </div>
             ) : (
               conversation.slice(1).map((elem, index) => {
@@ -309,8 +281,8 @@ const Chat = () => {
                   <div className="answer-container">
                     {elem.role !== "user" ? (
                       <img
-                        onClick={() => handleLike(elem.content)}
-                        src="./like.png"
+                        onClick={() => handleLike(elem.content, index)}
+                        src={likedStatus[index] ? "./liked.png" : "./like.png"}
                       ></img>
                     ) : (
                       <img></img>

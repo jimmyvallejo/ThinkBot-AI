@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { AuthContextProvider } from "./context/AuthContext";
@@ -10,10 +10,10 @@ import Chat from "./pages/ChatPage";
 import Navbar from "./components/Navbar";
 import Welcome from "./pages/welcome";
 
-import { init } from "./firebase";
+
 import TeacherDashboard from "./pages/Teacher-Dashboard";
 
-init();
+
 
 const theme = createTheme({
   typography: {
@@ -22,6 +22,8 @@ const theme = createTheme({
 });
 
 function App() {
+
+
   return (
     <AuthContextProvider>
       <ChatContextProvider>

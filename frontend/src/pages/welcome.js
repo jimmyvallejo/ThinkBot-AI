@@ -5,9 +5,26 @@ import { colors } from "../styles/colors";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import { useState, useContext, useEffect } from "react";
+import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
+import { baseUrl } from "../services/baseUrl";
 
 export default function Welcome() {
   const navigate = useNavigate();
+
+  const { user, authenticateUser } = useContext(AuthContext);
+
+  const [studentDemo, setStudentDemo] = useState({
+    email: "mary",
+    password: "123",
+  });
+
+  const [teacherDemo, setTeacherDemo] = useState({
+    email: "msadams",
+    password: "123",
+  });
+
   const blueColor = `rgba(30, 84, 183, 1)`;
 
   const but_style = {
@@ -16,6 +33,53 @@ export default function Welcome() {
     fontSize: "24px",
     marginBottom: 20,
   };
+
+  const but2_style = {
+    width: "174px",
+    height: "40px",
+    fontSize: "20px",
+    marginLeft: "5px",
+    marginRight: "5px",
+    marginTop: "80px",
+  };
+  const handleStudent = async () => {
+    const login = {
+      email: studentDemo.email,
+      password: studentDemo.password,
+    };
+
+    try {
+      const results = await axios.post(`${baseUrl}/auth/login`, login);
+
+      localStorage.setItem("authToken", results.data.token);
+      await authenticateUser();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleTeacher = async () => {
+    try {
+      const results = await axios.post(`${baseUrl}/auth/login`, teacherDemo);
+
+      localStorage.setItem("authToken", results.data.token);
+      await authenticateUser();
+    } catch (e) {
+      console.error(e);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      if (user.role == "student") {
+        navigate("/tutor");
+      } else if (user.role == "teacher") {
+        navigate(`/teacher-dashboard`);
+      }
+    }
+  }, [user]);
+
   return (
     <Grid container style={{ height: "100vh" }}>
       <Grid
@@ -51,7 +115,7 @@ export default function Welcome() {
             color: "white",
           }}
         >
-          Personal Student AI Robot Tutor
+          Personal Student AI Tutor
         </Typography>
         <img style={{ marginTop: "3rem" }} src="./mdc.svg" />
       </Grid>
@@ -110,7 +174,7 @@ export default function Welcome() {
               fontWeight: 600,
             }}
           >
-            With the help of AI giving our student the world
+            Giving our students the world with the help of AI
           </Typography>
           <Button style={but_style} onClick={() => navigate("/register")}>
             Sign Up
@@ -122,6 +186,17 @@ export default function Welcome() {
             Login
           </Button>
         </Box>
+        <div className="demos">
+          <Button style={but2_style} onClick={() => handleStudent()}>
+            Student Demo
+          </Button>
+          <Button
+            style={{ ...but2_style, background: "white", color: "black" }}
+            onClick={() => handleTeacher()}
+          >
+            Teacher Demo
+          </Button>
+        </div>
       </Grid>
     </Grid>
   );
